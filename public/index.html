@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WhatsApp Bot - Dashboard & Control Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+            <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.42 0-2.82-.37-4.06-1.08l-.29-.17-3.12.82.83-3.04-.19-.3a8.196 8.196 0 0 1-1.26-4.46c0-4.54 3.7-8.24 8.24-8.24h.06zm-3.53 4.26c-.19 0-.41.07-.63.31-.22.25-.85.83-.85 2.02 0 1.19.87 2.34.99 2.5.12.16 1.71 2.61 4.14 3.66.58.25 1.03.4 1.38.51.58.18 1.11.16 1.53.1.47-.07 1.44-.59 1.64-1.16.2-.57.2-1.06.14-1.16-.06-.1-.22-.16-.47-.28-.25-.12-1.44-.71-1.67-.79-.22-.09-.39-.13-.55.13-.16.25-.63.79-.77.95-.14.16-.28.18-.53.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.38-1.72-.14-.25-.01-.39.11-.51.11-.11.25-.28.37-.43.12-.14.16-.25.25-.41.08-.16.04-.31-.02-.43-.06-.12-.55-1.33-.76-1.82-.2-.48-.41-.41-.56-.42l-.48-.01z"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="brand-title">WhatsApp Bot Dashboard</h1>
+          <p class="brand-subtitle">Real-time Automation & Message Monitor</p>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Live Connection Status Badge -->
+        <div class="status-pill" id="statusPill">
+          <span class="status-dot" id="statusDot"></span>
+          <span class="status-text" id="statusText">Connecting...</span>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="stats-group">
+          <div class="stat-card">
+            <span class="stat-label">Total Messages</span>
+            <span class="stat-value" id="statTotalMessages">0</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Auto-Replies Sent</span>
+            <span class="stat-value text-accent" id="statRepliesSent">0</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Layout -->
+    <main class="dashboard-grid">
+      <!-- Left Column: Controls & QR Code -->
+      <section class="grid-column left-col">
+        
+        <!-- QR Code / Connection Card -->
+        <div class="card" id="connectionCard">
+          <div class="card-header">
+            <h2 class="card-title">
+              <span class="card-icon">📱</span> Device Connection
+            </h2>
+          </div>
+          
+          <div class="card-body connection-body">
+            <!-- QR Code Section (Shown when scan is required) -->
+            <div id="qrSection" class="qr-container">
+              <div class="qr-wrapper">
+                <img id="qrImage" src="" alt="WhatsApp QR Code" class="qr-img" />
+                <div id="qrLoading" class="qr-loader">
+                  <div class="spinner"></div>
+                  <p>Generating QR Code...</p>
+                </div>
+              </div>
+              <div class="qr-instructions">
+                <ol>
+                  <li>Open <strong>WhatsApp</strong> on your phone</li>
+                  <li>Tap <strong>Settings / Menu (⋮)</strong> &gt; <strong>Linked Devices</strong></li>
+                  <li>Tap <strong>Link a Device</strong> and point your camera here</li>
+                </ol>
+              </div>
+            </div>
+
+            <!-- Connected Section (Shown when authenticated) -->
+            <div id="connectedSection" class="connected-container hidden">
+              <div class="connected-icon-wrap">
+                <div class="pulse-ring"></div>
+                <svg viewBox="0 0 24 24" width="48" height="48" fill="#25d366">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+              </div>
+              <h3 class="connected-heading">WhatsApp Connected & Active!</h3>
+              <p class="connected-desc" id="connectedInfo">Your WhatsApp account is linked and ready to process messages.</p>
+              <div class="session-badge">Session Saved (LocalAuth)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Auto-Reply Control Card -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <span class="card-icon">⚡</span> Auto-Reply Settings
+            </h2>
+          </div>
+          
+          <div class="card-body">
+            <!-- Big Toggle Switch -->
+            <div class="toggle-control-box">
+              <div class="toggle-info">
+                <span class="toggle-title">Auto-Reply Feature</span>
+                <span class="toggle-subtitle" id="toggleStatusLabel">Currently Active</span>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="autoReplyToggle" checked>
+                <span class="slider round"></span>
+              </label>
+            </div>
+
+            <!-- Auto-Reply Message Textarea -->
+            <div class="message-config-box">
+              <div class="box-header-row">
+                <label for="replyMessageInput" class="input-label">Auto-Reply Message Text (English)</label>
+                <span class="char-count" id="charCount">0 chars</span>
+              </div>
+              <textarea id="replyMessageInput" rows="5" class="custom-textarea" placeholder="Enter auto-reply text here..."></textarea>
+              <button id="saveMessageBtn" class="btn btn-primary">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                  <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/>
+                </svg>
+                Save Reply Message
+              </button>
+            </div>
+
+            <!-- Group Messages Toggle -->
+            <div class="secondary-toggle-box">
+              <div class="toggle-info">
+                <span class="secondary-title">Reply to Group Messages</span>
+                <span class="secondary-desc">Keep disabled to avoid group spam & account flags</span>
+              </div>
+              <label class="switch switch-sm">
+                <input type="checkbox" id="groupReplyToggle">
+                <span class="slider round"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Right Column: Incoming Messages & Live Terminal -->
+      <section class="grid-column right-col">
+        
+        <!-- Live Incoming Messages Card (Sender Name & Number) -->
+        <div class="card messages-card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <span class="card-icon">📩</span> Incoming Messages
+              <span class="badge" id="messageCountBadge">0</span>
+            </h2>
+            <div class="filter-hint">Live feed with Sender Name &amp; Number</div>
+          </div>
+
+          <div class="card-body p-0">
+            <div class="messages-container" id="messagesList">
+              <div class="empty-state" id="emptyMessagesState">
+                <div class="empty-icon">💬</div>
+                <p class="empty-title">No incoming messages yet</p>
+                <p class="empty-subtitle">When someone sends you a message on WhatsApp, their name, number, and reply status will show up here instantly.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Terminal / Activity Log -->
+        <div class="card terminal-card">
+          <div class="terminal-header">
+            <div class="terminal-dots">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+            </div>
+            <div class="terminal-title">Live Terminal Output</div>
+            <div class="terminal-actions">
+              <label class="autoscroll-label">
+                <input type="checkbox" id="autoScrollCheck" checked> Auto-scroll
+              </label>
+              <button id="clearLogsBtn" class="btn-terminal-clear">Clear</button>
+            </div>
+          </div>
+
+          <div class="terminal-body" id="terminalOutput">
+            <!-- Live console lines will stream here -->
+          </div>
+        </div>
+
+      </section>
+    </main>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="toast">Message saved successfully!</div>
+
+  <!-- Socket.io client script -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
